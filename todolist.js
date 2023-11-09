@@ -1,29 +1,58 @@
 'use strict'
-let inputBox = document.getElementById("inp");
-let todolist = document.querySelector(".todolist");
+const inputBox = document.getElementById("inp");
+const todolist = document.querySelector(".todolist");
+const clearall = document.getElementById("clear");
+const tasksNum = document.querySelector(".tasksNum");
+const todo = document.querySelector("todolist");
+let array = []
+const createTime = getCurrentTime()
 
-function Add(){
-    if (inputBox.value == ""){
+function Add() {
+    if (inputBox.value.trim().length <= 0) {
         alert("Please Enter Your Task")
     } else {
-        let newTask = document.createElement("li");
-        newTask.innerHTML = `${inputBox.value} 
-        <span><i class="fa-regular fa-circle-xmark"></i></span></li>`;
+
+        const newTask = document.createElement("li");
+        newTask.classList.toggle('li')
+        // console.log(newTask)
+        newTask.innerHTML = `${inputBox.value} ${createTime}
+        <span><i class="fa-regular fa-circle-xmark"></i></span>`;
         todolist.append(newTask);
-        inputBox.value="";
+        array.push(newTask)
+        tasksNum.textContent = `${array.length}`;
+        inputBox.value = "";
         newTask.querySelector("i").addEventListener("click", remove);
-        function remove(){
+        function remove() {
             newTask.remove()
         }
+        // const mmm = newTask
+        newTask.addEventListener("click", function (event) {
+            // console.log(event)
+            if (event.target.className === "li") {
+                // console.log(event.target);
+                event.target.classList.toggle('checked')
+            }
+            // else if(event.target.classList ==='checked'){
+            //     event.target.classList.toggle(' ');
+            // }
+
+        })
     }
 
 }
 
-//     else {
-//         let li = document.createElement("li");
-//         li.innerHTML = inputBox.value;
-//         todolist.appendChild(li);
-//     }
-// }
+function Delete() {
+    const allLi = Array.from(document.querySelectorAll('li'))
+    clearall.addEventListener('click', () => {
+        allLi.forEach(item => {
+            return todolist.removeChild(item)
+        })
+    })
+}
+
+function getCurrentTime() {
+    const currentDate = new Date();
+    return currentDate.toLocaleTimeString();
+}
 
 
